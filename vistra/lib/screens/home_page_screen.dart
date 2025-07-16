@@ -7,7 +7,7 @@ class HomePageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Home Page')),
-      body: Column(children: [Text('Welcome to Home Page')]),
+      body: Center(child: Text('Welcome to Home Page')),
     );
   }
 }

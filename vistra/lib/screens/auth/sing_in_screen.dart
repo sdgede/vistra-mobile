@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vistra/bloc/sing%20in/sign_in_event.dart';
 import 'package:vistra/bloc/sing%20in/sing_in_bloc.dart';
 import 'package:vistra/bloc/sing%20in/sing_in_state.dart';
-import 'package:vistra/data/string/alert.dart';
+import 'package:vistra/res/constants/routers.dart';
+import 'package:vistra/res/string/alerts.dart';
 import 'package:vistra/screens/utils/dialog_utild.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -25,11 +26,20 @@ class _SignInScreenState extends State<SignInScreen> {
       body: BlocConsumer<SignInBloc, SignInState>(
         listener: (context, state) {
           if (state is SignInSuccess) {
-            Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoutes.home,
+              (Route<dynamic> route) => false,
+            );
+
+            DialogUtils.showSuccess(
+              context: context,
+              text: AppAlertText.successLogin,
+            );
           } else if (state is SignInError) {
             DialogUtils.showError(
               context: context,
-              text: state.message ?? AppAlertText.generalError,
+              text: AppAlertText.generalError,
             );
           }
         },

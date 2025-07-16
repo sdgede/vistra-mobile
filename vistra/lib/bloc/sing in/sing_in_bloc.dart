@@ -4,7 +4,7 @@ import 'package:vistra/bloc/sing%20in/sign_in_event.dart';
 import 'package:vistra/bloc/sing%20in/sing_in_state.dart';
 import 'package:vistra/data/repository/implements/sing_in_repo.dart';
 import 'package:vistra/data/service/auth_service.dart';
-import 'package:vistra/data/string/alert.dart';
+import 'package:vistra/res/string/alerts.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final SignInRepo signInRepo;

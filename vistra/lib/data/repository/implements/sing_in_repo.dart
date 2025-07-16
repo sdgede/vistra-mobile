@@ -16,27 +16,40 @@ class SignInRepo implements SignInInterface {
       final response = await authApi.signIn(email: email, password: password);
 
       if (response != null && response.isSuccess()) {
-        if (response.data is Map<String, dynamic>) {
-          final data = response.data as Map<String, dynamic>;
-          final authModel = AuthModel.fromJson(data);
+        final rawData = response.data;
 
-          final token = authModel.loginResponse.token;
-          if (token.isNotEmpty) {
-            await AuthService.instance.saveToken(token);
-            debugPrint('✅ Token berhasil disimpan');
-          } else {
-            debugPrint('⚠️ Token kosong');
+        if (rawData is Map<String, dynamic>) {
+          final userData = rawData['user'];
+          final token = rawData['token'] ?? '';
+
+          if (userData == null || token.isEmpty) {
+            debugPrint("⚠️ Data user atau token kosong di response");
+            return null;
           }
+
+          final authModel = AuthModel.fromJson({
+            'userModel': userData,
+            'loginResponse': {'user': userData, 'token': token},
+            'metaModel': {
+              'type': 'success', // hardcoded karena tidak ada di response
+              'message': response.message,
+            },
+            'loginRequest': {'email': email, 'password': password},
+          });
+
+          await AuthService.instance.saveToken(token);
+          debugPrint('✅ Token berhasil disimpan');
 
           return authModel;
         } else {
           debugPrint(
-            '⚠️ Response data bukan Map<String, dynamic>: ${response.data}',
+            '⚠️ Response.data bukan Map<String, dynamic>: ${response.data}',
           );
         }
       } else {
         debugPrint('❌ Gagal login: ${response?.message}');
       }
+
       return null;
     } catch (e) {
       debugPrint('🚨 Repo Login Error: $e');

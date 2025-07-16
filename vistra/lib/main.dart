@@ -5,7 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:vistra/data/service/auth_service.dart';
 import 'package:vistra/data/service/bloc_service.dart';
-import 'package:vistra/screens/auth/splash_screen.dart';
+import 'package:vistra/routes/auth_router.dart';
+import 'package:vistra/routes/router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,11 +43,8 @@ class _MyAppState extends State<MyApp> {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const SplashScreen(),
-          // Tambah route lain nanti
-        },
+        initialRoute: AuthRouter.splashScreen,
+        onGenerateRoute: RouterGenerator.generateRoute,
       ),
     );
   }

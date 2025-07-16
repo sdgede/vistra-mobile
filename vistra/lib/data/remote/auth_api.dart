@@ -1,8 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:vistra/config/enpoint.dart';
 import 'package:vistra/data/models/common_response_model.dart';
-import 'package:vistra/data/service/auth_service.dart';
 import 'package:vistra/data/service/base_service.dart';
+import 'package:vistra/res/constants/enpoints.dart';
 
 class AuthApi extends BaseService {
   Future<CommonResponseModel?> signIn({
@@ -11,24 +10,28 @@ class AuthApi extends BaseService {
   }) async {
     try {
       final data = {'email': email, 'password': password};
-
       debugPrint('📦 Body: $data');
 
       final result = await request(
-        url: Enpoint.login,
+        url: APpEnpoints.urllogin,
         type: RequestType.reqPost,
         data: data,
         extraHeaders: null,
       );
 
-      if (result.statusCode == 201) {
-        final Map<String, dynamic> responseData =
-            result.data as Map<String, dynamic>;
-        final token = responseData['token'];
+      final statusCode = result.statusCode ?? 201;
 
-        await AuthService.instance.saveToken(token);
+      if (result.data is Map<String, dynamic>) {
+        final json = result.data as Map<String, dynamic>;
+        final commonResponse = CommonResponseModel.fromJson(statusCode, json);
+
+        debugPrint("🎯 Parsed CommonResponse: ${commonResponse.message}");
+
+        return commonResponse;
       } else {
-        debugPrint("⚠️ Gagal login. Status code: ${result.statusMessage}");
+        debugPrint(
+          "❌ Response data bukan Map<String, dynamic>: ${result.data}",
+        );
       }
 
       return null;
