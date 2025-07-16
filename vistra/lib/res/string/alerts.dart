@@ -7,7 +7,6 @@ class AppAlertText {
   static const String unauthorizedError =
       'You do not have permission to access this';
 
-  // Network-related errors
   static const String networkError = 'A network error has occurred';
   static const String noInternet =
       'Unstable internet connection, please check your connection and try again';
@@ -50,6 +49,7 @@ class AppAlertText {
   static const String weakPassword = 'Password is too weak';
 
   // Success messages
+  static const String successLogin = 'Login successfully';
   static const String successSave = 'Data saved successfully';
   static const String successDelete = 'Data deleted successfully';
   static const String successUpdate = 'Data updated successfully';
